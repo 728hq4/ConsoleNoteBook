@@ -143,7 +143,7 @@ namespace SkillBox
                     Console.Clear();
                     CreateUser();
                     Console.Clear();
-                    Console.WriteLine($"User {users[users.Length-1]} has been created.");
+                    Console.WriteLine($"User {users[users.Length-1].Name} has been created.");
                     break;
                 default:
                     Console.Clear();
