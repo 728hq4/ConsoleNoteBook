@@ -17,7 +17,6 @@ namespace SkillBox
         internal string Summary { get; set; } = "";
         internal string Author { get; set; }
         internal int Id { get; }
-        private bool status { get; set; } = true;
         #endregion
 
         #region Constructors
@@ -62,23 +61,6 @@ namespace SkillBox
                     Console.ForegroundColor = ConsoleColor.Gray;
                     break;
             }
-        }
-        internal void DeleteNote()
-        {
-            if (status)
-            {
-                status = false;
-                Console.WriteLine("Note has been deleted.");
-            }
-            else
-                Console.WriteLine("This note is already deleted!");
-        }
-        internal void ActivateNote()
-        {
-            if (!status)
-                status = true;
-            else
-                Console.WriteLine("This note is already activated!");
         }
         #endregion
 

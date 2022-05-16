@@ -12,6 +12,7 @@ namespace SkillBox
         public static void Main(string[] args)
         {
             Repo repo = new Repo();
+            repo.CheckAndCreateUser();
             repo.MainMenu();
             // Ожидание ввода
             Console.ReadLine();
