@@ -8,14 +8,23 @@ namespace SkillBox
 {
     internal class User
     {
-        User[] users;
-        static int Id = 0;
+        static internal int Id = 0;
         
         #region User Fields
         internal string Name { get; set; } = "Undefined";
         internal DateTime CreatedAt { get; set; } = DateTime.Now;
         internal int UserId { get; set; }
-        public static string CurrentUserName { get; set; }
+        public static string CurrentUserName { get; set; } = "";
+        #endregion
+
+        #region Constructor
+        internal User (string name)
+        {
+            this.Name = name;
+            this.CreatedAt = DateTime.Now;
+            Id++;
+            this.UserId = Id;
+        }
         #endregion
     }
 }
