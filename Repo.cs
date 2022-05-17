@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
-namespace SkillBox
+namespace NoteBook
 {
     internal class Repo
     {
@@ -16,27 +13,58 @@ namespace SkillBox
         private void PrintNotesList()
         {
             if (notes.Length == 0)
-                Console.WriteLine("Notes list is empty.");
+                Console.WriteLine("Список заметок пуст:(");
             else
             {
                 string id = "ID";
-                string summary = "Summary";
-                string author = "Author";
-                string createdAt = "Created";
+                string summary = "Заголовок";
+                string author = "Автор";
+                string createdAt = "Дата создания";
                 Console.WriteLine($"{id, 4}|{summary, 40}|{author, 20}|{createdAt, 20}");
+                int counter = 0;
                 for (int i = 0; i < notes.Length; i++)
                 {
-                    Console.WriteLine($"{notes[i].Id, 4}|{notes[i].Summary, 40}|{notes[i].Author, 20}|{notes[i].CreatedAt, 20}");
+                    if (notes[i].Status)
+                    {
+                        Console.WriteLine($"{notes[i].Id,4}|{notes[i].Summary,40}|{notes[i].Author,20}|{notes[i].CreatedAt,20}");
+                        counter++;
+                    }
+                    
                 }
-                Console.WriteLine($"Total: {notes.Length}");
+                Console.WriteLine($"Всего: {counter}");
+                counter = 0;
             }
             DetailNoteMenu();          
         }
+        private void PrintNoteById(int id)
+        {
+            foreach(Note n in notes)
+            {
+                if(id == n.Id)
+                {
+                    if (n.Status)
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
+                        Console.WriteLine($"Создано: {n.CreatedAt: f}\nОбновлено: {n.UpdatedAt: f}\n");
+                        Console.ForegroundColor = ConsoleColor.Gray;
+
+                        Console.WriteLine($"Заголовок: {n.Summary}\n\nТекст сообщения: {n.Text}\n\nАвтор: {n.Author}");
+                        Console.WriteLine();
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Выбранная заметка удалена");
+                        Menu();
+                    }  
+                }
+            }
+        }
         private void AddNote()
         {
-            Console.WriteLine("Enter the summary");
+            Console.WriteLine("Введите заголовок");
             string sum = Console.ReadLine();
-            Console.WriteLine("Enter the note");
+            Console.WriteLine("Введите текст заметки");
             string text = Console.ReadLine();
             
             Note note = new Note(sum, text);
@@ -45,28 +73,22 @@ namespace SkillBox
                 Array.Resize(ref notes, Note.id);
             }
             notes[Note.id - 1] = note;
+            SaveNotes();
         }
         private void OpenNote()
         {
-            Console.WriteLine("Enter the note ID");
+            Console.WriteLine("Введите ID заметки");
             int id = Convert.ToInt32(Console.ReadLine());
             Console.Clear();
-            notes[id - 1].PrintNote();
+            PrintNoteById(id);
             NoteActions(id);
         }
-        private void DeleteNote(int id)
-        {
-            Array.Clear(notes, id, 1);
-            notes[id] = notes[notes.Length-1];
-            Array.Resize(ref notes, notes.Length - 1);
-            Note.id--;
-        }
         #endregion
-        
+
         #region Menu methods
-        internal void MainMenu()
+        private void MainMenu()
         {
-            Console.WriteLine("1 - Notes\n2 - Users");
+            Console.WriteLine("1 - Заметки\n2 - Пользователи");
             byte action = Convert.ToByte(Console.ReadLine());
             Console.Clear();
             switch (action)
@@ -84,11 +106,16 @@ namespace SkillBox
                     break;
             }
             Console.Clear();
-            MainMenu();
+            Menu();
+        }
+        internal void Menu()
+        {
+            PrintNotesList();
+            DetailNoteMenu();
         }
         private void DetailNoteMenu()
         {
-            Console.WriteLine("1 - Open a note\n2 - Add a note\n3 - Main menu");
+            Console.WriteLine("1 - Открыть заметку\n2 - Создать новую\n3 - Настройки");
             byte action = Convert.ToByte(Console.ReadLine());
             switch (action)
             {
@@ -109,7 +136,7 @@ namespace SkillBox
         }
         private void DetailUsersMenu()
         {
-            Console.WriteLine("1 - Users list\n2 - Main menu");
+            Console.WriteLine("1 - Список пользователей\n2 - Главное меню");
             byte action = Convert.ToByte(Console.ReadLine());
             switch (action)
             {
@@ -125,52 +152,54 @@ namespace SkillBox
                     Console.Clear();
                     break;
             }
-            MainMenu();
+            Menu();
         }
         private void UserActions()
         {
-            Console.WriteLine("1 - Select User\n2 - Create new one\n3 - Main menu");
+            Console.WriteLine("1 - Выбрать пользователя\n2 - Создать нового\n3 - Главное меню");
             byte action1 = Convert.ToByte(Console.ReadLine());
             switch (action1)
             {
                 case 1:
-                    Console.WriteLine("Enter the user ID");
+                    Console.WriteLine("Введите ID пользователя");
                     ChooseUser(Convert.ToInt32(Console.ReadLine()));
                     Console.Clear();
-                    Console.WriteLine($"Now you have logged as {User.CurrentUserName}");
+                    Console.WriteLine($"Вы вошли как {User.CurrentUserName}");
                     break;
                 case 2:
                     Console.Clear();
                     CreateUser();
                     Console.Clear();
-                    Console.WriteLine($"User {users[users.Length-1].Name} has been created.");
+                    Console.WriteLine($"Пользователь {users[users.Length-1].Name} успешно создан.");
                     break;
                 default:
                     Console.Clear();
                     break;
             }
-            MainMenu();
+            Menu();
         }
         private void NoteActions(int id)
         {
-            Console.WriteLine("1 - Edit\n2 - Delete\n3 - Main menu");
+            Console.WriteLine("1 - Изменить\n2 - Удалить\n3 - Главное меню");
             byte action1 = Convert.ToByte(Console.ReadLine());
             switch (action1)
             {
                 case 1:
                     Console.Clear();
                     notes[id - 1].EditNote();
+                    SaveNotes();
                     Console.Clear();
                     PrintNotesList();
                     break;
                 case 2:
                     Console.Clear();
-                    DeleteNote(id - 1);
+                    notes[id - 1].ChangeStatus();
+                    SaveNotes();
                     PrintNotesList();
                     break;
                 case 3:
                     Console.Clear();
-                    MainMenu();
+                    Menu();
                     break;
             }
         }
@@ -181,24 +210,24 @@ namespace SkillBox
         {
             if(User.CurrentUserName == "")
             {
-                User.Id--;
                 CreateUser();
                 ChooseUser(1);
                 Console.Clear();
-                Console.WriteLine($"Hello, {User.CurrentUserName}!");
+                Console.WriteLine($"Привет, {User.CurrentUserName}!");
             }
             else
-                Console.WriteLine($"Hello, {User.CurrentUserName}!");
+                Console.WriteLine($"Привет, {User.CurrentUserName}!");
         }
         private void CreateUser()
         {
-            Console.WriteLine("Hello! What's you name?");
+            Console.WriteLine("Привет! Как тебя зовут?");
             User user = new User (Console.ReadLine());
             if (users.Length < User.Id)
             {
                 Array.Resize(ref users, User.Id);
             }
             users[User.Id - 1] = user;
+            SaveUsers();
         }
         private void ChooseUser(int id)
         {
@@ -207,19 +236,87 @@ namespace SkillBox
         private void PrintUsersList()
         {
             if (users.Length == 0)
-                Console.WriteLine("Users list is empty.");
+                Console.WriteLine("Список пользователей пуст.");
             else
             {
                 string id = "ID";
-                string name = "Name";
-                string createdAt = "Created";
+                string name = "Имя";
+                string createdAt = "Дата создания";
                 Console.WriteLine($"{id,4}|{name,20}|{createdAt,20}");
                 for (int i = 0; i < users.Length; i++)
                 {
                     Console.WriteLine($"{users[i].UserId,4}|{users[i].Name,20}|{users[i].CreatedAt,20}");
                 }
-                Console.WriteLine($"Total: {users.Length}");
+                Console.WriteLine($"Всего: {users.Length}");
             }
+        }
+        #endregion
+
+        #region Save And Load Methods
+        private void LoadNotes()
+        {
+            string[] lines = File.ReadAllLines("notes.csv");
+            foreach(string line in lines)
+            {
+                string[] row = line.Split(',');
+                
+                Note note = new Note(row[0], row[1], row[2], row[3], row[4], Convert.ToInt32(row[5]), Convert.ToBoolean(row[6]));
+                if (notes.Length < Note.id)
+                {
+                    Array.Resize(ref notes, Note.id);
+                }
+                notes[Note.id - 1] = note;
+            }
+
+        }
+        private void SaveNotes()
+        {
+            string[] lines = new string[notes.Length];
+            for(int i = 0; i < notes.Length; i++)
+            {
+                lines[i] = $"{notes[i].CreatedAt},{notes[i].UpdatedAt},{notes[i].Text},{notes[i].Summary},{notes[i].Author},{notes[i].Id},{notes[i].Status}";
+            }
+            File.WriteAllLines("notes.csv", lines);
+        }
+        private void LoadUsers()
+        {
+            User.Id--;
+            string[] lines = File.ReadAllLines("users.csv");
+            foreach (string line in lines)
+            {
+                string[] row = line.Split(',');
+
+                User user = new User(row[0], row[1], Convert.ToInt32(row[2]));
+                if (users.Length < User.Id)
+                {
+                    Array.Resize(ref users, User.Id);
+                }
+                users[User.Id - 1] = user;
+            }
+            if(users.Length != 0)
+            {
+                ChooseUser(1);
+            }
+        }
+        private void SaveUsers()
+        {
+            string[] lines = new string[users.Length];
+            for(int i = 0; i < users.Length; i++)
+            {
+                lines[i] = $"{users[i].Name},{users[i].CreatedAt},{users[i].UserId}";
+            }
+            File.WriteAllLines("users.csv", lines);
+        }
+        #endregion
+
+        #region Initialisation
+        internal void Start()
+        {
+            LoadNotes();
+            SaveNotes();
+            LoadUsers();
+            SaveUsers();
+            CheckAndCreateUser();
         }
         #endregion
     }

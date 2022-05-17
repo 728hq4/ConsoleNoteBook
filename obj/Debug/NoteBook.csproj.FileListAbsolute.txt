@@ -1,0 +1,5 @@
+E:\Dev\Education\SkillBox\SkillBox\obj\Debug\NoteBook.csproj.AssemblyReference.cache
+E:\Dev\Education\SkillBox\SkillBox\obj\Debug\NoteBook.csproj.SuggestedBindingRedirects.cache
+E:\Dev\Education\SkillBox\SkillBox\obj\Debug\NoteBook.csproj.CoreCompileInputs.cache
+E:\Dev\Education\SkillBox\SkillBox\obj\Debug\SkillBox.exe
+E:\Dev\Education\SkillBox\SkillBox\obj\Debug\SkillBox.pdb

@@ -1,25 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Globalization;
 
-namespace SkillBox
+
+namespace NoteBook
 {
     internal class Note
     {
         static public int id = 0;
 
         #region Note fields
-        internal DateTime CreatedAt { get; } = DateTime.Now;
-        private DateTime UpdatedAt { get; set; } = DateTime.Now;
+        internal string CreatedAt { get; } = Convert.ToString(DateTime.Now); 
+        internal string UpdatedAt { get; set; } = Convert.ToString(DateTime.Now);
         internal string Text { get; set; } = "";
         internal string Summary { get; set; } = "";
         internal string Author { get; set; }
+        internal bool Status { get; set; } = true;
         internal int Id { get; }
         #endregion
 
         #region Constructors
+        internal Note(string createdAt, string updatedAt, string text, string summary, string author, int id, bool status)
+        {
+            CreatedAt = createdAt;
+            UpdatedAt = updatedAt;
+            Text = text;
+            Summary = summary;
+            Author = author;
+            Note.id++;
+            Id = id;
+            Status = status;
+        }
         internal Note(string summary, string text)
         {
             Summary = summary;
@@ -27,39 +37,49 @@ namespace SkillBox
             Author = User.CurrentUserName;
             id++;
             Id = id;
+            Status = true;
         }
-        internal Note(string summary) : this(summary, "Write something...") { }
+        internal Note(string summary) : this(summary, "Напишите что-нибудь...") { }
         #endregion
 
         #region Note Methods      
-        internal void PrintNote()
-        {
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine($"Created: {CreatedAt: f}\nUpdated: {UpdatedAt: f}\n");
-            Console.ForegroundColor = ConsoleColor.Gray;
-
-            Console.WriteLine($"Summary: {Summary}\n{Text}\nAuthor: {Author}");
-            Console.WriteLine();
-        }
         internal void EditNote()
         {
-            Console.WriteLine("Whitch field do you want to edit?\n1 - Summary\n2 - Message");
+            Console.WriteLine("Какое поле редактировать?\n1 - Заголовок\n2 - Текст сообщения");
             byte action = Convert.ToByte(Console.ReadLine());
             switch (action)
             {
                 case 1:
-                    Console.WriteLine($"Current summary: {Summary}\nNew summary: ");
+                    Console.WriteLine($"Текущий заголовок: {Summary}\nНовый заголовок: ");
                     Summary = Console.ReadLine();
+                    UpdatedAt = Convert.ToString(DateTime.Now);
                     break;
                 case 2:
-                    Console.WriteLine($"Current message: {Text}\nNew message: ");
+                    Console.WriteLine($"Текущий текст: {Text}\nНовый текст: ");
                     Text = Console.ReadLine();
+                    UpdatedAt = Convert.ToString(DateTime.Now);
                     break;
                 default:
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Unknown command.");
+                    Console.WriteLine("Неизвестная команда.");
                     Console.ForegroundColor = ConsoleColor.Gray;
                     break;
+            }
+        }
+        internal void ChangeStatus()
+        {
+            if (Status)
+            {
+                Status = false;
+                Console.WriteLine($"Заметка {this.Id} удалена.");
+                UpdatedAt = Convert.ToString(DateTime.Now);
+            }
+                
+            else
+            {
+                Status = true;
+                Console.WriteLine($"Заметка {this.Id} восстановлена.");
+                UpdatedAt = Convert.ToString(DateTime.Now);
             }
         }
         #endregion
