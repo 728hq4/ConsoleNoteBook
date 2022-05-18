@@ -1,0 +1,8 @@
+E:\Dev\Education\SkillBox\SkillBox\bin\Debug\SkillBox.exe.config
+E:\Dev\Education\SkillBox\SkillBox\bin\Debug\SkillBox.exe
+E:\Dev\Education\SkillBox\SkillBox\bin\Debug\SkillBox.pdb
+E:\Dev\Education\SkillBox\SkillBox\obj\Debug\SkillBox.csproj.AssemblyReference.cache
+E:\Dev\Education\SkillBox\SkillBox\obj\Debug\SkillBox.csproj.SuggestedBindingRedirects.cache
+E:\Dev\Education\SkillBox\SkillBox\obj\Debug\SkillBox.csproj.CoreCompileInputs.cache
+E:\Dev\Education\SkillBox\SkillBox\obj\Debug\SkillBox.exe
+E:\Dev\Education\SkillBox\SkillBox\obj\Debug\SkillBox.pdb
