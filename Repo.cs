@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 
 namespace NoteBook
@@ -32,6 +32,7 @@ namespace NoteBook
                     
                 }
                 Console.WriteLine($"Всего: {counter}");
+                Console.WriteLine();
                 counter = 0;
             }
             DetailNoteMenu();          
@@ -86,28 +87,6 @@ namespace NoteBook
         #endregion
 
         #region Menu methods
-        private void MainMenu()
-        {
-            Console.WriteLine("1 - Заметки\n2 - Пользователи");
-            byte action = Convert.ToByte(Console.ReadLine());
-            Console.Clear();
-            switch (action)
-            {
-                case 1:
-                    PrintNotesList();
-                    DetailNoteMenu();
-                    break;
-                case 2:
-                    Console.Clear();
-                    DetailUsersMenu();
-                    break;
-                default:
-                    Console.Clear();
-                    break;
-            }
-            Console.Clear();
-            Menu();
-        }
         internal void Menu()
         {
             PrintNotesList();
@@ -115,7 +94,9 @@ namespace NoteBook
         }
         private void DetailNoteMenu()
         {
-            Console.WriteLine("1 - Открыть заметку\n2 - Создать новую\n3 - Настройки");
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("1 - Открыть заметку\n2 - Создать новую\n3 - Пользователи");
+            Console.ForegroundColor = ConsoleColor.Gray;
             byte action = Convert.ToByte(Console.ReadLine());
             switch (action)
             {
@@ -130,13 +111,16 @@ namespace NoteBook
                     break;
                 default:
                     Console.Clear();
-                    MainMenu();
+                    PrintUsersList();
+                    UserActions();
                     break;
             }
         }
         private void DetailUsersMenu()
         {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine("1 - Список пользователей\n2 - Главное меню");
+            Console.ForegroundColor = ConsoleColor.Gray;
             byte action = Convert.ToByte(Console.ReadLine());
             switch (action)
             {
@@ -156,7 +140,9 @@ namespace NoteBook
         }
         private void UserActions()
         {
-            Console.WriteLine("1 - Выбрать пользователя\n2 - Создать нового\n3 - Главное меню");
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("1 - Выбрать пользователя\n2 - Создать нового\n3 - Заметки");
+            Console.ForegroundColor = ConsoleColor.Gray;
             byte action1 = Convert.ToByte(Console.ReadLine());
             switch (action1)
             {
@@ -180,7 +166,9 @@ namespace NoteBook
         }
         private void NoteActions(int id)
         {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine("1 - Изменить\n2 - Удалить\n3 - Главное меню");
+            Console.ForegroundColor = ConsoleColor.Gray;
             byte action1 = Convert.ToByte(Console.ReadLine());
             switch (action1)
             {
@@ -213,10 +201,18 @@ namespace NoteBook
                 CreateUser();
                 ChooseUser(1);
                 Console.Clear();
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
                 Console.WriteLine($"Привет, {User.CurrentUserName}!");
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine();
             }
             else
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
                 Console.WriteLine($"Привет, {User.CurrentUserName}!");
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine();
+            }
         }
         private void CreateUser()
         {
@@ -248,6 +244,7 @@ namespace NoteBook
                     Console.WriteLine($"{users[i].UserId,4}|{users[i].Name,20}|{users[i].CreatedAt,20}");
                 }
                 Console.WriteLine($"Всего: {users.Length}");
+                Console.WriteLine();
             }
         }
         #endregion
